@@ -15,10 +15,12 @@ import requests
 from py_mini_racer import MiniRacer
 
 
+def get_web_id_last_time():
+    return int(time.time())
+
 
 class CommonUtils(object):
     def __init__(self):
-
 
         self.user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36'
 
@@ -60,7 +62,6 @@ class CommonUtils(object):
         abogus = self.a_bogus_ctx.call('generate_a_bogus', query, user_agent)
         return abogus
 
-
     def get_ms_token(self, randomlength=107):
         """
         根据传入长度产生随机字符串
@@ -71,7 +72,6 @@ class CommonUtils(object):
         for _ in range(randomlength):
             random_str += base_str[random.randint(0, length)]
         return random_str
-
 
     def get_ttwid_webid(self, req_url):
         while True:
@@ -86,10 +86,10 @@ class CommonUtils(object):
                 cookies_dict = response.cookies.get_dict()
                 ttwid_str = cookies_dict.get('ttwid')
                 render_data_text = \
-                re.compile('\<script id=\"RENDER_DATA\" type\=\"application\/json\">(.*?)\<\/script\>').findall(
-                    response.text)
-                if(render_data_text):
-                    render_data_text=render_data_text[0]
+                    re.compile('\<script id=\"RENDER_DATA\" type\=\"application\/json\">(.*?)\<\/script\>').findall(
+                        response.text)
+                if (render_data_text):
+                    render_data_text = render_data_text[0]
                     render_data_text = requests.utils.unquote(render_data_text)
                     render_data_json = json.loads(render_data_text, strict=False)
                     webid = render_data_json.get('app').get('odin').get('user_unique_id')
